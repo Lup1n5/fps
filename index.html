@@ -8,6 +8,40 @@ var player;
 var bullets = [];
 var enemies = [];
 var score = 0;
+var gameState = 'start';
+
+
+
+function drawTitleScreen() {
+  background(255);
+  
+  // Draw game title
+  fill('black');
+  textSize(48);
+  textAlign(CENTER, CENTER);
+  text('My Cool Game', width / 2, height / 2 - 50);
+  
+  // Draw start button
+  fill('blue');
+  rect(width / 2 - 50, height / 2 + 50, 100, 50);
+  
+  // Draw start text
+  fill('white');
+  textSize(24);
+  text('Start', width / 2, height / 2 + 75);
+}
+
+function mouseClicked() {
+  if(gameState === 'start') {
+    // Check if start button is clicked
+    if(mouseX > width / 2 - 50 && mouseX < width / 2 + 50 &&
+       mouseY > height / 2 + 50 && mouseY < height / 2 + 100) {
+      gameState = 'play';
+    }
+  } else if(gameState === 'play') {
+    bullets.push(createVector(player.x + 25, player.y));
+  }
+}
 
 function setup() {
   createCanvas(800, 600);
@@ -16,6 +50,11 @@ function setup() {
 
 function draw() {
   background(255);
+  if(gameState === 'start') {
+    drawTitleScreen();
+  } else if(gameState === 'play') {
+    
+  
   
   // Draw player
   fill('blue');
@@ -63,14 +102,16 @@ function draw() {
         j--;
         score++;
         break;
+        }
       }
     }
-  }
+  
   
   // Display score
   fill('black');
   textSize(24);
   text('Score: ' + score, 10, 30);
+  }
 }
 
 function mouseMoved() {
