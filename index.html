@@ -4,81 +4,59 @@
 <body>
 <canvas id="gameCanvas" width="800" height="600"></canvas>
 <script>
-var canvas = document.getElementById('gameCanvas');
-var ctx = canvas.getContext('2d');
-
-var player = {
-  x: canvas.width / 2,
-  y: canvas.height - 50,
-  width: 69,
-  height: 69
-};
-
+var player;
 var bullets = [];
 var enemies = [];
 var score = 0;
 
-function drawPlayer() {
-  ctx.fillStyle = 'blue';
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+function setup() {
+  createCanvas(800, 600);
+  player = createVector(width / 2, height - 50);
 }
 
-function drawBullets() {
-  ctx.fillStyle = 'red';
+function draw() {
+  background(255);
+  
+  // Draw player
+  fill('blue');
+  rect(player.x, player.y, 50, 50);
+  
+  // Draw bullets
+  fill('red');
   for(var i = 0; i < bullets.length; i++) {
     var bullet = bullets[i];
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-  }
-}
-
-function drawEnemies() {
-  ctx.fillStyle = 'green';
-  for(var i = 0; i < enemies.length; i++) {
-    var enemy = enemies[i];
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-  }
-}
-
-function updateBullets() {
-  for(var i = 0; i < bullets.length; i++) {
-    var bullet = bullets[i];
+    rect(bullet.x, bullet.y, 5, 10);
     bullet.y -= 2;
     if(bullet.y < 0) {
       bullets.splice(i, 1);
       i--;
     }
   }
-}
-
-function updateEnemies() {
+  
+  // Draw enemies
+  fill('green');
   for(var i = 0; i < enemies.length; i++) {
     var enemy = enemies[i];
+    rect(enemy.x, enemy.y, 20, 20);
     enemy.y += 1;
-    if(enemy.y > canvas.height) {
+    if(enemy.y > height) {
       enemies.splice(i, 1);
       i--;
     }
   }
-}
-
-function spawnEnemy() {
-  enemies.push({
-    x: Math.random() * (canvas.width - 20),
-    y: -20,
-    width: 40,
-    height: 40
-  });
-}
-
-function checkCollisions() {
+  
+  // Spawn enemies
+  if(random() < 0.01) {
+    enemies.push(createVector(random(width - 20), -20));
+  }
+  
+  // Check collisions
   for(var i = 0; i < enemies.length; i++) {
     var enemy = enemies[i];
     for(var j = 0; j < bullets.length; j++) {
       var bullet = bullets[j];
-      if(bullet.x < enemy.x + enemy.width &&
-         bullet.x + bullet.width > enemy.x &&
-         bullet.y < enemy.y + enemy.height &&
-         bullet.y + bullet.height > enemy.y) {
+      if(bullet.x < enemy.x + 20 && bullet.x + 5 > enemy.x &&
+         bullet.y < enemy.y + 20 && bullet.y + 10 > enemy.y) {
         enemies.splice(i, 1);
         i--;
         bullets.splice(j, 1);
@@ -88,39 +66,21 @@ function checkCollisions() {
       }
     }
   }
+  
+  // Display score
+  fill('black');
+  textSize(24);
+  text('Score: ' + score, 10, 30);
 }
 
-canvas.addEventListener('mousemove', function(e) {
-  player.x = e.clientX - player.width / 2;
-});
-
-canvas.addEventListener('click', function(e) {
-  bullets.push({
-    x: player.x + player.width / 2,
-    y: player.y,
-    width: 5,
-    height: 10
-  });
-});
-
-function gameLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawPlayer();
-  drawBullets();
-  drawEnemies();
-  updateBullets();
-  updateEnemies();
-  checkCollisions();
-  if(Math.random() < 0.01) {
-    spawnEnemy();
-  }
-  ctx.fillStyle = 'black';
-  ctx.font = '24px Arial';
-  ctx.fillText('Score: ' + score, 10, 30);
-  requestAnimationFrame(gameLoop);
+function mouseMoved() {
+  player.x = mouseX - 25;
 }
 
-gameLoop();
+function mouseClicked() {
+  bullets.push(createVector(player.x + 25, player.y));
+}
+
 </script>
 </body>
 </html>
