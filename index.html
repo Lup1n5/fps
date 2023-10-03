@@ -9,8 +9,8 @@ var ctx = canvas.getContext('2d');
 var player = {
   x: canvas.width / 2,
   y: canvas.height - 50,
-  width: 50,
-  height: 50
+  width: 69,
+  height: 69
 };
 
 var bullets = [];
@@ -64,8 +64,8 @@ function spawnEnemy() {
   enemies.push({
     x: Math.random() * (canvas.width - 20),
     y: -20,
-    width: 20,
-    height: 20
+    width: 40,
+    height: 40
   });
 }
 
