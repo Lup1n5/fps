@@ -129,19 +129,22 @@ function draw() {
 
      // Update bullet positions in Firebase
      for(var i = bullets.length -1; i <=0; i--) {
-       var bullet = bullets[i];
-       if((Date.now() - bullet.timestamp) >6000) {
+       var boollet = bullets[i];
+       if (boollet) {
+       if(Date.now() - boollet.timestamp >6000) {
          bullets.splice(i,1);
          db.ref('game/bullet' + i).remove();
        } else {
          db.ref('game/bullet' + i).set({
-           x: bullet.x,
-           y: bullet.y,
-           timestamp: bullet.timestamp,
-           dirx: bullet.dir.x,
-           diry: bullet.dir.y
+           x: boollet.x,
+           y: boollet.y,
+           timestamp: boollet.timestamp,
+           dirx: boollet.dir.x,
+           diry: boollet.dir.y
          });
        }
+       }
+       
      }
    }
 }
