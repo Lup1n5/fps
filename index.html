@@ -45,8 +45,16 @@ function drawTitleScreen() {
   text('Start', width / 2, height / 2 + 75);
 }
 
-function mouseMoved() {
-  player.x = mouseX - 25;
+function keyPressed() {
+   if(keyCode === UP_ARROW || key === 'w') {
+     player.y -=10;
+   } else if(keyCode === DOWN_ARROW || key === 's') {
+     player.y +=10;
+   } else if(keyCode === LEFT_ARROW || key === 'a') {
+     player.x -=10;
+   } else if(keyCode === RIGHT_ARROW || key === 'd') {
+     player.x +=10;
+   }
 }
 
 function mouseClicked() {
@@ -57,20 +65,24 @@ function mouseClicked() {
       gameState = 'play';
     }
    } else if(gameState === 'play') {
-     var bullet = createVector(player.x + 25, player.y);
+     var bullet = createVector(player.x +25, player.y);
      bullet.timestamp = Date.now();
+     bullet.dir = createVector(mouseX - player.x, mouseY - player.y);
+     bullet.dir.normalize();
      bullets.push(bullet);
-     db.ref('game/bullet' + (bullets.length - 1)).set({
+     db.ref('game/bullet' + (bullets.length -1)).set({
        x: bullet.x,
        y: bullet.y,
-       timestamp: bullet.timestamp
+       timestamp: bullet.timestamp,
+       dirx: bullet.dir.x,
+       diry: bullet.dir.y
      });
    }
 }
 
 function setup() {
    createCanvas(windowWidth, windowHeight);
-   player = createVector(width / 2, height - 50);
+   player = createVector(width /2, height -50);
 }
 
 function draw() {
@@ -81,16 +93,21 @@ function draw() {
    } else if(gameState === 'play') {
 
      // Draw player
-     fill('blue');
-     rect(player.x, player.y, 50, 50);
+     push();
+     translate(player.x, player.y);
+     rotate(atan2(mouseY - player.y, mouseX - player.x));
+     rectMode(CENTER);
+     rect(0,0,50,50);
+     pop();
 
      // Draw bullets
      fill('red');
      for(var i = bullets.length -1; i >=0; i--) {
        var bullet = bullets[i];
-       rect(bullet.x, bullet.y, 5,10);
-       bullet.y -=2;
-       if(bullet.y <0) {
+       rect(bullet.x, bullet.y,5,10);
+       bullet.x += bullet.dir.x *2;
+       bullet.y += bullet.dir.y *2;
+       if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
          bullets.splice(i,1);
          db.ref('game/bullet' + i).remove();
        }
@@ -116,7 +133,9 @@ function draw() {
          db.ref('game/bullet' + i).set({
            x: bullet.x,
            y: bullet.y,
-           timestamp: bullet.timestamp
+           timestamp: bullet.timestamp,
+           dirx: bullet.dir.x,
+           diry: bullet.dir.y
          });
        }
      }
