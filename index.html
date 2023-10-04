@@ -104,7 +104,11 @@ function draw() {
      fill('red');
      for(var i = bullets.length -1; i >=0; i--) {
        var bullet = bullets[i];
-       rect(bullet.x, bullet.y,5,10);
+       push();
+       translate(bullet.x, bullet.y);
+       rotate(atan2(bullet.dir.y, bullet.dir.x));
+       rect(0,0,5,10);
+       pop();
        bullet.x += bullet.dir.x *2;
        bullet.y += bullet.dir.y *2;
        if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
@@ -124,7 +128,7 @@ function draw() {
      });
 
      // Update bullet positions in Firebase
-     for(var i = bullets.length -1; i <=0; i--) {
+     for(var i = bullets.length -1; i >=0; i--) {
        var bullet = bullets[i];
        if(Date.now() - bullet.timestamp >6000) {
          bullets.splice(i,1);
