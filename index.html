@@ -130,16 +130,16 @@ function draw() {
      // Update bullet positions in Firebase
      if (bullets.length > 0) {
      for(var i = bullets.length -1; i <=0; i--) {
-       //var boollet = bullets[i];
+       var boollet = bullets[i].life;
        
-       if(Date.now() - bullets[i].life >6000) {
+       if(Date.now() - boollet >6000) {
          bullets.splice(i,1);
          db.ref('game/bullet' + i).remove();
        } else {
          db.ref('game/bullet' + i).set({
            x: bullets[i].x,
            y: bullets[i].y,
-           life: bullets[i].life,
+           life: boollet,
            dirx: bullets[i].dir.x,
            diry: bullets[i].dir.y
          });
