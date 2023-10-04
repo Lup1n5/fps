@@ -128,9 +128,10 @@ function draw() {
      });
 
      // Update bullet positions in Firebase
+     if (bullets.length > 0) {
      for(var i = bullets.length -1; i <=0; i--) {
        var boollet = bullets[i];
-       if (boollet) {
+       
        if(Date.now() - boollet.timestamp >6000) {
          bullets.splice(i,1);
          db.ref('game/bullet' + i).remove();
@@ -143,8 +144,9 @@ function draw() {
            diry: boollet.dir.y
          });
        }
-       }
        
+       
+     }
      }
    }
 }
