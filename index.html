@@ -128,10 +128,10 @@ function draw() {
      });
 
      // Update bullet positions in Firebase
-     if (bullets.length > 0) {
+     
      var mn = bullets.length-1;
      for(var i = mn; i >=0; i--) {
-      console.log(i);
+      //console.log(i);
        var boollet = bullets[i].life;
        
        
@@ -149,7 +149,7 @@ function draw() {
        
        
      }
-     }
+     
      // Assuming 'db' is your Firebase database instance
 var bulletsRef = db.ref('game/bullets');
 
