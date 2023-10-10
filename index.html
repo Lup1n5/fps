@@ -131,6 +131,7 @@ function draw() {
      if (bullets.length > 0) {
      var mn = bullets.length-1;
      for(var i = mn; i <=0; i--) {
+      console.log(i);
        var boollet = bullets[i].life;
        
        if(Date.now() - boollet >6000) {
