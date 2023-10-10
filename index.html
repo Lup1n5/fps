@@ -70,7 +70,7 @@ function mouseClicked() {
      bullet.dir = createVector(mouseX - player.x, mouseY - player.y);
      bullet.dir.normalize();
      bullets.push(bullet);
-     db.ref('game/bullet' + (bullets.length -1)).set({
+     db.ref('game/bullets/bullet' + (bullets.length -1)).set({
        x: bullet.x,
        y: bullet.y,
        life: bullet.life,
@@ -113,7 +113,7 @@ function draw() {
        bullet.y += bullet.dir.y *2;
        if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
          bullets.splice(i,1);
-         db.ref('game/bullet' + i).remove();
+         db.ref('game/bullets/bullet' + i).remove();
        }
      }
 
@@ -122,7 +122,7 @@ function draw() {
      textSize(24);
      text('Score: ' + score,10,30);
 
-     db.ref('game/player').set({
+     db.ref('game/players/player').set({
        x: player.x,
        y: player.y
      });
@@ -134,22 +134,40 @@ function draw() {
       console.log(i);
        var boollet = bullets[i].life;
        
-       if(Date.now() - boollet >6000) {
-         bullets.splice(i,1);
-         db.ref('game/bullet' + i).remove();
-       } else {
-         db.ref('game/bullet' + i).set({
+       
+         //bullets.splice(i,1);
+         //db.ref('game/bullets/bullet' + i).remove();
+      
+         db.ref('game/bullets/bullet' + i).set({
            x: bullets[i].x,
            y: bullets[i].y,
            life: boollet,
            dirx: bullets[i].dir.x,
            diry: bullets[i].dir.y
          });
-       }
+       
        
        
      }
      }
+     // Assuming 'db' is your Firebase database instance
+var bulletsRef = db.ref('game/bullets');
+
+bulletsRef.on('value', function(snapshot) {
+  var bullets = snapshot.val();
+  var currentTime = Date.now();
+
+  for(var bullet in bullets) {
+    if(bullets.hasOwnProperty(bullet)) {
+      var bulletData = bullets[bullet];
+      if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
+        // Remove the bullet from Firebase
+        bulletsRef.child(bullet).remove();
+      }
+    }
+  }
+});
+
    }
 }
 </script>
