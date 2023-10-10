@@ -69,7 +69,8 @@ function mouseClicked() {
      bullet.life = Date.now();
      bullet.dir = createVector(mouseX - player.x, mouseY - player.y);
      bullet.dir.normalize();
-     bullets.push(bullet);
+     bullets = getBullets();
+     //bullets.push(bullet);
      db.ref('game/bullets/bullet' + (bullets.length -1)).set({
        x: bullet.x,
        y: bullet.y,
@@ -84,13 +85,31 @@ function setup() {
    createCanvas(windowWidth, windowHeight);
    player = createVector(width /2, height -50);
 }
+function getBullets() {
+  var ballets;
+  bulletsRef.on('value', function(snapshot) {
+   ballets = snapshot.val();
+  var currentTime = Date.now();
 
+  for(var bullet in ballets) {
+    if(ballets.hasOwnProperty(bullet)) {
+      var bulletData = ballets[bullet];
+      if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
+        // Remove the bullet from Firebase
+        bulletsRef.child(bullet).remove();
+      }
+    }
+  }
+});
+  return(ballets);
+}
 function draw() {
    background(255);
 
    if(gameState === 'start') {
      drawTitleScreen();
    } else if(gameState === 'play') {
+    bullets = getBullets();
 
      // Draw player
      push();
@@ -101,20 +120,7 @@ function draw() {
      pop();
      var bulletsRef = db.ref('game/bullets');
 
-bulletsRef.on('value', function(snapshot) {
-   bullets = snapshot.val();
-  var currentTime = Date.now();
 
-  for(var bullet in bullets) {
-    if(bullets.hasOwnProperty(bullet)) {
-      var bulletData = bullets[bullet];
-      if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
-        // Remove the bullet from Firebase
-        bulletsRef.child(bullet).remove();
-      }
-    }
-  }
-});
 
      // Draw bullets
      fill('red');
