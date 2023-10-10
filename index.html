@@ -65,7 +65,7 @@ function mouseClicked() {
       gameState = 'play';
     }
    } else if(gameState === 'play') {
-     var bullet = createVector(player.x +25, player.y);
+    var bullet = createVector(player.x, player.y);
      bullet.life = Date.now();
      bullet.dir = createVector(mouseX - player.x, mouseY - player.y);
      bullet.dir.normalize();
@@ -99,6 +99,22 @@ function draw() {
      rectMode(CENTER);
      rect(0,0,50,50);
      pop();
+     var bulletsRef = db.ref('game/bullets');
+
+bulletsRef.on('value', function(snapshot) {
+   bullets = snapshot.val();
+  var currentTime = Date.now();
+
+  for(var bullet in bullets) {
+    if(bullets.hasOwnProperty(bullet)) {
+      var bulletData = bullets[bullet];
+      if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
+        // Remove the bullet from Firebase
+        bulletsRef.child(bullet).remove();
+      }
+    }
+  }
+});
 
      // Draw bullets
      fill('red');
@@ -111,10 +127,10 @@ function draw() {
        pop();
        bullet.x += bullet.dir.x *2;
        bullet.y += bullet.dir.y *2;
-       if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
-         bullets.splice(i,1);
-         db.ref('game/bullets/bullet' + i).remove();
-       }
+      //  if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
+      //    bullets.splice(i,1);
+      //    db.ref('game/bullets/bullet' + i).remove();
+      //  }
      }
 
      // Display score
@@ -151,22 +167,7 @@ function draw() {
      }
      
      // Assuming 'db' is your Firebase database instance
-var bulletsRef = db.ref('game/bullets');
 
-bulletsRef.on('value', function(snapshot) {
-  var bullets = snapshot.val();
-  var currentTime = Date.now();
-
-  for(var bullet in bullets) {
-    if(bullets.hasOwnProperty(bullet)) {
-      var bulletData = bullets[bullet];
-      if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
-        // Remove the bullet from Firebase
-        bulletsRef.child(bullet).remove();
-      }
-    }
-  }
-});
 
    }
 }
