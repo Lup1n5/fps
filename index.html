@@ -78,6 +78,7 @@ function mouseClicked() {
        dirx: bullet.dir.x,
        diry: bullet.dir.y
      });
+     bullets = getBullets();
    }
 }
 
@@ -87,6 +88,7 @@ function setup() {
 }
 function getBullets() {
   var ballets;
+  var bulletsRef = db.ref('game/bullets');
   bulletsRef.on('value', function(snapshot) {
    ballets = snapshot.val();
   var currentTime = Date.now();
@@ -118,7 +120,7 @@ function draw() {
      rectMode(CENTER);
      rect(0,0,50,50);
      pop();
-     var bulletsRef = db.ref('game/bullets');
+     
 
 
 
