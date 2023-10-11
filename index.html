@@ -91,12 +91,20 @@ function mouseClicked() {
 function setup() {
    createCanvas(windowWidth, windowHeight);
    background(255);
+   var index = db.ref('game/bulletIndex').on('value', function(snapshot) {
+    return(snapshot.val());
+   });
+   if (index) {
+    index = 0;
+    db.ref('game/bulletIndex').set(index);
+   }
    drawTitleScreen();
    player = createVector(width /2, height -50);
 }
 function getBullets() {
   var ballets;
   var bulletsRef = db.ref('game/bullets');
+  
   bulletsRef.on('value', function(snapshot) {
    ballets = snapshot.val();
   var currentTime = Date.now();
@@ -112,11 +120,14 @@ function getBullets() {
     }
   }
 });
-if (ballets) {
+index = db.ref('game/bulletIndex').on('value', function(snapshot) {
+    return(snapshot.val());
+   });
+if (ballets&& ballets.length === index) {
+  if (!ballets) {ballets = [];}
   return(ballets);
 } else {
-  ballets = [];
-  return(ballets);
+  console.log("oofie detected");
 }
 }
 function draw() {
@@ -126,6 +137,7 @@ function draw() {
     // drawTitleScreen();
    if(gameState === 'play') {
     background(255);
+    db.ref('game/bulletIndex').set(index);
     bullets = getBullets();
 
      // Draw player
