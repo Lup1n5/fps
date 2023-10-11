@@ -46,7 +46,7 @@ function drawTitleScreen() {
   text('Start', width / 2, height / 2 + 75);
   input = createInput();
   input.attribute('maxlength', '20');
-  input.position(width / 2 - input.width / 2, height / 2 + 120);
+  input.position(width / 2 - input.width / 2, height / 2 + 110);
 }
 
 function keyPressed() {
@@ -65,7 +65,7 @@ function mouseClicked() {
    if(gameState === 'start') {
     // Check if start button is clicked
     if(mouseX > width / 2 - 50 && mouseX < width / 2 + 50 &&
-       mouseY > height / 2 + 50 && mouseY < height / 2 + 100) {
+       mouseY > height / 2 + 50 && mouseY < height / 2 + 100 && input.value()) {
       username = input.value();
       gameState = 'play';
     }
@@ -89,6 +89,7 @@ function mouseClicked() {
 
 function setup() {
    createCanvas(windowWidth, windowHeight);
+   drawTitleScreen();
    player = createVector(width /2, height -50);
 }
 function getBullets() {
@@ -113,9 +114,9 @@ function getBullets() {
 function draw() {
    background(255);
 
-   if(gameState === 'start') {
-     drawTitleScreen();
-   } else if(gameState === 'play') {
+   //if(gameState === 'start') {
+    // drawTitleScreen();
+   if(gameState === 'play') {
     bullets = getBullets();
 
      // Draw player
