@@ -106,12 +106,17 @@ function getBullets() {
       if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
         // Remove the bullet from Firebase
         bulletsRef.child(bullet).remove();
-        delete [bullet]
+        
       }
     }
   }
 });
+if (ballets) {
   return(ballets);
+} else {
+  ballets = [];
+  return(ballets);
+}
 }
 function draw() {
    
@@ -135,7 +140,7 @@ function draw() {
 
      // Draw bullets
      fill('red');
-     if (bullets) {
+     
      for(var i = bullets.length -1; i >=0; i--) {
        var bullet = bullets[i];
        push();
@@ -149,7 +154,7 @@ function draw() {
       //    bullets.splice(i,1);
       //    db.ref('game/bullets/bullet' + i).remove();
       //  }
-     }}
+     }
 
      // Display score
      fill('black');
@@ -164,7 +169,7 @@ function draw() {
 
      // Update bullet positions in Firebase
      bullets = getBullets();
-    if (bullets){
+    
     var mn = bullets.length-1;
     for(var i = mn; i >=0; i--) {
     //console.log(i);
@@ -184,7 +189,7 @@ function draw() {
       
       
       
-    }}
+    }
      
      // Assuming 'db' is your Firebase database instance
 
