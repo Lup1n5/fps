@@ -89,6 +89,7 @@ function mouseClicked() {
 
 function setup() {
    createCanvas(windowWidth, windowHeight);
+   background(255);
    drawTitleScreen();
    player = createVector(width /2, height -50);
 }
@@ -112,11 +113,12 @@ function getBullets() {
   return(ballets);
 }
 function draw() {
-   background(255);
+   
 
    //if(gameState === 'start') {
     // drawTitleScreen();
    if(gameState === 'play') {
+    background(255);
     bullets = getBullets();
 
      // Draw player
