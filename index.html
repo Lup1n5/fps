@@ -77,7 +77,7 @@ function mouseClicked() {
      bullet.dir.normalize();
      bullets = getBullets();
      //bullets.push(bullet);
-     db.ref('game/bullets/bullet' + (bullets.length)).set({
+     db.ref('game/bullets/bullet' + (index)).set({
        x: bullet.x,
        y: bullet.y,
        life: bullet.life,
@@ -155,7 +155,7 @@ function draw() {
      // Draw bullets
      fill('red');
      
-     for(var i = bullets.length -1; i >=0; i--) {
+     for(var i = index -1; i >=0; i--) {
        var bullet = bullets[i];
        push();
        translate(bullet.x, bullet.y);
