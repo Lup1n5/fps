@@ -115,6 +115,7 @@ function getBullets() {
       if(currentTime - bulletData.life > 6000) { // If bullet has been around for more than 6 seconds
         // Remove the bullet from Firebase
         bulletsRef.child(bullet).remove();
+        index--;
         
       }
     }
@@ -183,8 +184,8 @@ function draw() {
      // Update bullet positions in Firebase
      bullets = getBullets();
     
-    var mn = bullets.length-1;
-    for(var i = mn; i >=0; i--) {
+    //var mn = index;
+    for(var i = index; i >=0; i--) {
     //console.log(i);
       var boollet = bullets[i].life;
       
