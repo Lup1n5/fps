@@ -67,6 +67,7 @@ function mouseClicked() {
     if(mouseX > width / 2 - 50 && mouseX < width / 2 + 50 &&
        mouseY > height / 2 + 50 && mouseY < height / 2 + 100 && input.value()) {
       username = input.value();
+      input.visible = 0;
       gameState = 'play';
     }
    } else if(gameState === 'play') {
