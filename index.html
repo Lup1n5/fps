@@ -25,7 +25,8 @@ var player;
 var bullets = [];
 var score = 0;
 var gameState = 'start';
-
+let input;
+let username = "";
 function drawTitleScreen() {
   background(255);
   
@@ -43,6 +44,9 @@ function drawTitleScreen() {
   fill('white');
   textSize(24);
   text('Start', width / 2, height / 2 + 75);
+  input = createInput();
+  input.attribute('maxlength', '20');
+  input.position(width / 2 - input.width / 2, height / 2 + 120);
 }
 
 function keyPressed() {
@@ -62,6 +66,7 @@ function mouseClicked() {
     // Check if start button is clicked
     if(mouseX > width / 2 - 50 && mouseX < width / 2 + 50 &&
        mouseY > height / 2 + 50 && mouseY < height / 2 + 100) {
+      username = input.value();
       gameState = 'play';
     }
    } else if(gameState === 'play') {
@@ -147,33 +152,34 @@ function draw() {
      text('Score: ' + score,10,30);
 
      db.ref('game/players/player').set({
+       username: username,
        x: player.x,
        y: player.y
      });
 
      // Update bullet positions in Firebase
      bullets = getBullets();
-     
-     var mn = bullets.length-1;
-     for(var i = mn; i >=0; i--) {
-      //console.log(i);
-       var boollet = bullets[i].life;
-       
-       
-         //bullets.splice(i,1);
-         //db.ref('game/bullets/bullet' + i).remove();
+    if (bullets){
+    var mn = bullets.length-1;
+    for(var i = mn; i >=0; i--) {
+    //console.log(i);
+      var boollet = bullets[i].life;
       
-         db.ref('game/bullets/bullet' + i).set({
-           x: bullets[i].x,
-           y: bullets[i].y,
-           life: boollet,
-           dirx: bullets[i].dir.x,
-           diry: bullets[i].dir.y
-         });
-       
-       
-       
-     }
+      
+        //bullets.splice(i,1);
+        //db.ref('game/bullets/bullet' + i).remove();
+    
+        db.ref('game/bullets/bullet' + i).set({
+          x: bullets[i].x,
+          y: bullets[i].y,
+          life: boollet,
+          dirx: bullets[i].dir.x,
+          diry: bullets[i].dir.y
+        });
+      
+      
+      
+    }}
      
      // Assuming 'db' is your Firebase database instance
 
