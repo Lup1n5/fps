@@ -162,8 +162,8 @@ function draw() {
      textSize(24);
      text('Score: ' + score,10,30);
 
-     db.ref('game/players/player').set({
-       username: username,
+     db.ref('game/players/'+username).set({
+       //username: username,
        x: player.x,
        y: player.y
      });
