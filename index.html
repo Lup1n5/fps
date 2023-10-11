@@ -71,7 +71,7 @@ function mouseClicked() {
      bullet.dir.normalize();
      bullets = getBullets();
      //bullets.push(bullet);
-     db.ref('game/bullets/bullet' + (bullets.length -1)).set({
+     db.ref('game/bullets/bullet' + (bullets.length)).set({
        x: bullet.x,
        y: bullet.y,
        life: bullet.life,
@@ -130,11 +130,11 @@ function draw() {
        var bullet = bullets[i];
        push();
        translate(bullet.x, bullet.y);
-       rotate(atan2(bullet.dir.y, bullet.dir.x));
+       rotate(atan2(bullet.diry, bullet.dirx));
        rect(0,0,5,10);
        pop();
-       bullet.x += bullet.dir.x *2;
-       bullet.y += bullet.dir.y *2;
+       bullet.x += bullet.dirx *2;
+       bullet.y += bullet.diry *2;
       //  if(bullet.x <0 || bullet.x > width || bullet.y <0 || bullet.y > height) {
       //    bullets.splice(i,1);
       //    db.ref('game/bullets/bullet' + i).remove();
@@ -152,6 +152,7 @@ function draw() {
      });
 
      // Update bullet positions in Firebase
+     bullets = getBullets();
      
      var mn = bullets.length-1;
      for(var i = mn; i >=0; i--) {
