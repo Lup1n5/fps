@@ -96,7 +96,7 @@ function setup() {
    });
    if (index) {
     index = 0;
-    db.ref('game/bulletIndex').setValue(index);
+    db.ref('game/bulletIndex').set(index);
    }
    drawTitleScreen();
    player = createVector(width /2, height -50);
@@ -121,7 +121,7 @@ function getBullets() {
     }
   }
 });
-db.ref('game/bulletIndex').setValue(index);
+db.ref('game/bulletIndex').set(index);
 index = db.ref('game/bulletIndex').on('value', function(snapshot) {
     return(snapshot.val());
    });
@@ -139,7 +139,7 @@ function draw() {
     // drawTitleScreen();
    if(gameState === 'play') {
     background(255);
-    db.ref('game/bulletIndex').setValue(index);
+    db.ref('game/bulletIndex').set(index);
     bullets = getBullets();
 
      // Draw player
