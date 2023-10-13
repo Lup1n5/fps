@@ -138,7 +138,7 @@ function draw() {
     // drawTitleScreen();
    if(gameState === 'play') {
     background(255);
-    db.ref('game/bulletIndex').setValue(index);
+    db.ref('game/bulletIndex').setValue(`${index}`);
     bullets = getBullets();
 
      // Draw player
